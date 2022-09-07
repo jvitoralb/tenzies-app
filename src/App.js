@@ -1,53 +1,74 @@
 import React from 'react';
+import Tenzi from './components/Tenzi';
 
 
 const App = () => {
-    const [diceState, setDiceState] = React.useState({
-        playing: false,
-        dices: []
+    const [gameStatus, setGameStatus] = React.useState({
+        started: false,
+        finished: false
+    })
+    const [gameDices, setGameDices] = React.useState({
+        dices: [],
+        holdDices: []
     });
 
+    /**
+     *  Add a count for how many times Roll was clicked
+     *  Also add a timer and a congrats for finishing and reseting the game
+     *  Finish the game as soon as the last one is clicked
+    **/
     const randomNum = () => Math.ceil(Math.random() * 6);
+    const matchDies = () => gameDices.holdDices.every((dice, index, arr) => dice.value === arr[0].value);
+
+    React.useEffect(() => {
+        let gameTrack = gameDices.dices.every(dice => dice.die)
+
+        if (gameTrack) {
+            setGameStatus(({
+                finished: true,
+                started: false
+            }));
+            return console.log('Well Done!')
+        }
+    }, [gameDices.dices])
 
     const getDices = () => {
         let newArr = [];
         for(let i = 0; i < 10; i++) {
-            let dice = {
-                value: randomNum(),
+            newArr.push({
+                id: `${i + 1}`,
                 die: false,
-                id: `${i + 1}`
-            }
-            newArr.push(dice);
+                value: randomNum()
+            });
         }
-        setDiceState(prevState => ({
+        setGameDices(prevState => ({
             ...prevState,
             dices: [...newArr]
         }));
     }
 
-    const dieHandler = (e) => {
-        const { id, value } = e.target;
+    const holdDie = (e) => {
+        const { id } = e.target;
 
-        setDiceState(prevState => ({
-            ...prevState,
-            dices: prevState.dices.map(dice => {
-                return dice.id === id ? {
-                    ...dice,
-                    die: !dice.die
-                } : dice
-            })
-        }));
+        setGameDices(prevState => {
+            const newDices = prevState.dices.map(dice => dice.id === id ? {
+                ...dice,
+                die: !dice.die
+            } : dice);
+
+            return {
+                ...prevState,
+                dices: newDices,
+                holdDices: newDices.filter(dice => dice.die)
+            }
+        });
     }
 
     const submitDies = () => {
-        let matchValues = diceState.dices.filter(dice => dice.die)
-        .every((dice, index, arr) => dice.value === arr[0].value);
-
-        if (!matchValues) {
+        if (!matchDies()) {
             return console.log('Values selected do not match!');
         }
-
-        setDiceState(prevState => ({
+        setGameDices(prevState => ({
             ...prevState,
             dices: prevState.dices.map(dice => {
                 return  !dice.die ? {
@@ -59,36 +80,29 @@ const App = () => {
     }
 
     const startRoll = () => {
-        if (!diceState.playing) {
-            console.log('start playing  ')
-            setDiceState(prevState => ({
-                ...prevState,
-                playing: true
-            }));
+        if (!gameStatus.started) {
+            setGameStatus(prevStatus => ({
+                ...prevStatus,
+                started: true
+            }))
             return getDices();
         }
-        console.log('roll')
         return submitDies();
     }
 
     return(
         <React.Fragment>
             <h1>Tenzies App</h1>
-            {
-                diceState.dices.map((obj, idx) => (
-                    <React.Fragment key={idx}>
-                        <button id={obj.id}
-                            value={obj.value}
-                            onClick={dieHandler}
-                            style={{backgroundColor: obj.die && 'aliceblue'}}
-                        >
-                            {obj.value}
-                        </button>
-                    </React.Fragment>
-                ))
-            }
+            <p>
+                {!matchDies() && 'Values Selected do not match!'}
+            </p>
+            <Tenzi
+                game={gameDices}
+                status={gameStatus}
+                dieHandler={holdDie}
+            />
             <button onClick={startRoll}>
-                {!diceState.playing ? 'Start Playing' : 'Roll'}
+                {!gameStatus.started ? 'Start Playing' : 'Roll'}
             </button>
         </React.Fragment>
     );
