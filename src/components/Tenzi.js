@@ -13,16 +13,21 @@ const Tenzi = ({ game, status, dieHandler }) => {
         </button>
     ));
     const endGame = (
-        <ul>
-            <p>Well Done!</p>
-            <li>Your Clicks {status.count}</li>
-        </ul>
+        <div className='end-game'>
+            <h3>Well Done!</h3>
+            <p>Clicks {status.count}</p>
+            <p>Time {'do:it'.toLocaleUpperCase()}</p>
+        </div>
     );
 
     return (
         <React.Fragment>
-            {/* {endGame} */}
-            {(status.finished && !status.started) ? endGame : playDices}
+            {   
+                (status.started || status.finished) &&
+                <div className='dices'>
+                    {(status.finished && !status.started) ? endGame : playDices}
+                </div>
+            }
         </React.Fragment>
     );
 }

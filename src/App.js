@@ -1,5 +1,6 @@
 import React from 'react';
 import Tenzi from './components/Tenzi';
+import './components/Styling/styles.css'
 
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
 
     /**
      *  Add a timer
+     *  May be better to change started and finished for a solo string
     **/
     const randomNum = () => Math.ceil(Math.random() * 6);
     const matchDies = () => gameDices.hold.every((dice, index, arr) => dice.value === arr[0].value);
@@ -26,9 +28,9 @@ const App = () => {
     }
 
     React.useEffect(() => {
-        let gameTrack = (gameDices.dices.length && gameDices.dices.every(dice => dice.die));
+        let dicesTrack = (gameDices.dices.length && gameDices.dices.every(dice => dice.die));
 
-        if (gameTrack) {
+        if (dicesTrack && matchDies()) {
             setGameStatus(prevStatus => ({
                 ...prevStatus,
                 finished: true,
@@ -106,19 +108,25 @@ const App = () => {
 
     return (
         <React.Fragment>
-            <h1>Tenzies App</h1>
-            <p>
-                {!matchDies() && 'Values Selected do not match!'}
-            </p>
-            <p>{gameStatus.started && `Clicks: ${gameStatus.count}`}</p>
-            <Tenzi
-                game={gameDices}
-                status={gameStatus}
-                dieHandler={holdDie}
-            />
-            <button onClick={startRoll}>
-                {!gameStatus.started ? 'Start Playing' : 'Roll'}
-            </button>
+            <header>
+                <h1 className='title'>Tenzies App</h1>
+            </header>
+            <main>
+                <section className='app-sec'>
+                    <p>{gameStatus.started && `Clicks: ${gameStatus.count}`}</p>
+                    <p className='stats-click'>
+                        {!matchDies() && 'Values Selected do not match!'}
+                    </p>
+                    <Tenzi
+                        game={gameDices}
+                        status={gameStatus}
+                        dieHandler={holdDie}
+                    />
+                    <button onClick={startRoll}>
+                        {!gameStatus.started ? 'Start Playing' : 'Roll'}
+                    </button>
+                </section>
+            </main>
         </React.Fragment>
     );
 }
