@@ -1,12 +1,12 @@
 import React from 'react';
 import Tenzi from './components/Tenzi';
-import './components/Styling/styles.css'
+import './components/Styling/styles.css';
 
 
 const App = () => {
     const [gameStatus, setGameStatus] = React.useState({
         started: false,
-        finished: false,
+        status: 'initial',
         count: 0
     });
     const [gameDices, setGameDices] = React.useState({
@@ -16,7 +16,6 @@ const App = () => {
 
     /**
      *  Add a timer
-     *  May be better to change started and finished for a solo string
     **/
     const randomNum = () => Math.ceil(Math.random() * 6);
     const matchDies = () => gameDices.hold.every((dice, index, arr) => dice.value === arr[0].value);
@@ -33,8 +32,8 @@ const App = () => {
         if (dicesTrack && matchDies()) {
             setGameStatus(prevStatus => ({
                 ...prevStatus,
-                finished: true,
-                started: false
+                started: false,
+                status: 'finish'
             }));
             return console.log('Well Done!');
         }
@@ -60,10 +59,12 @@ const App = () => {
         const { id } = e.target;
 
         setGameDices(prevState => {
-            const newDices = prevState.dices.map(dice => dice.id === id ? {
-                ...dice,
-                die: !dice.die
-            } : dice);
+            const newDices = prevState.dices.map(dice => {
+                return dice.id === id ? {
+                    ...dice,
+                    die: !dice.die
+                } : dice
+            });
 
             return {
                 ...prevState,
@@ -95,15 +96,21 @@ const App = () => {
 
     const startRoll = () => {
         if (!gameStatus.started) {
-            setGameStatus(prevStatus => ({
-                ...prevStatus,
+            setGameStatus({
                 started: true,
+                status: 'start',
                 count: 0
-            }));
+            });
             return getDices();
         }
 
         return submitDies();
+    }
+
+    const displayBtn = {
+        start: 'Roll',
+        finish: 'Play Again',
+        initial: 'Start Playing'
     }
 
     return (
@@ -113,7 +120,9 @@ const App = () => {
             </header>
             <main>
                 <section className='app-sec'>
-                    <p>{gameStatus.started && `Clicks: ${gameStatus.count}`}</p>
+                    <p className='warning'>
+                        {gameStatus.started && `Clicks: ${gameStatus.count}`}
+                    </p>
                     <p className='stats-click'>
                         {!matchDies() && 'Values Selected do not match!'}
                     </p>
@@ -123,7 +132,7 @@ const App = () => {
                         dieHandler={holdDie}
                     />
                     <button onClick={startRoll}>
-                        {!gameStatus.started ? 'Start Playing' : 'Roll'}
+                        {displayBtn[gameStatus.status]}
                     </button>
                 </section>
             </main>

@@ -20,12 +20,17 @@ const Tenzi = ({ game, status, dieHandler }) => {
         </div>
     );
 
+    const display = {
+        'start': playDices,
+        'finish': endGame
+    }
+
     return (
         <React.Fragment>
             {   
-                (status.started || status.finished) &&
+                display[status.status] &&
                 <div className='dices'>
-                    {(status.finished && !status.started) ? endGame : playDices}
+                    {display[status.status]}
                 </div>
             }
         </React.Fragment>
