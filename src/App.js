@@ -39,20 +39,20 @@ const App = () => {
     }
 
     React.useEffect(() => {
-        let dicesTrack = (gameDices.dices.length && gameDices.dices.every(dice => dice.die));
-        /**
-         * Need to fix this matchDies dependecy thing, maybe wrap it up in dices track donno
-         */
-        if (dicesTrack && matchDies()) {
+        let dicesTrack = (
+            gameDices.dices.length &&
+            gameDices.dices.every(dice => dice.die) && 
+            gameDices.hold.every((dice, index, arr) => dice.value === arr[0].value)
+        );
+
+        if (dicesTrack) {
             setGameStatus(prevStatus => ({
                 ...prevStatus,
                 started: false,
                 status: 'finish'
             }));
-            return console.log('Well Done!');
         }
-
-    }, [gameDices.dices]);
+    }, [gameDices]);
 
     const getDices = () => {
         let newArr = [];
@@ -70,29 +70,8 @@ const App = () => {
         }));
     }
 
-    const holdDie = (e) => {
-        const { id } = e.target;
-
-        setGameDices(prevState => {
-            const newDices = prevState.dices.map(dice => {
-                return dice.id === id ? {
-                    ...dice,
-                    die: !dice.die
-                } : dice
-            });
-
-            return {
-                ...prevState,
-                dices: newDices,
-                hold: newDices.filter(dice => dice.die)
-            }
-        });
-
-        addClick()
-    }
-
-    const submitDies = () => {
-        addClick()
+    const rollDices = () => {
+        addClick();
 
         if (!matchDies()) {
             return console.log('Values selected do not match!');
@@ -120,7 +99,7 @@ const App = () => {
             return getDices();
         }
 
-        return submitDies();
+        return rollDices();
     }
 
     const displayBtn = {
@@ -136,16 +115,17 @@ const App = () => {
             </header>
             <main>
                 <section className='app-sec'>
-                    <p className='warning'>
-                        {!matchDies() && 'Values Selected do not match!'}
-                    </p>
                     <Status
                         allStats={gameStatus}
                     />
+                    <p className='warning'>
+                        {!matchDies() && 'Values Selected do not match!'}
+                    </p>
                     <Tenzi
                         game={gameDices}
                         status={gameStatus}
-                        dieHandler={holdDie}
+                        clickCount={addClick}
+                        setGame={(changes) => setGameDices(changes)}
                     />
                     <button onClick={startRoll}>
                         {displayBtn[gameStatus.status]}

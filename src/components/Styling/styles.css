@@ -35,6 +35,11 @@ button:hover {
     margin: 12px;
 }
 
+.warning {
+    color: red;
+    font-weight: bold;
+}
+
 .app-sec {
     padding: 12px;
     border-radius: 8px;
