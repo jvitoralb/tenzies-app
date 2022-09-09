@@ -1,5 +1,6 @@
 import React from 'react';
 import Tenzi from './components/Tenzi';
+import Status from './components/Status';
 import './components/Styling/styles.css';
 
 
@@ -7,16 +8,27 @@ const App = () => {
     const [gameStatus, setGameStatus] = React.useState({
         started: false,
         status: 'initial',
-        count: 0
+        count: 0,
+        timer: 0
     });
     const [gameDices, setGameDices] = React.useState({
         dices: [],
         hold: []
     });
 
-    /**
-     *  Add a timer
-    **/
+    React.useEffect(() => {
+        let timerInterval;
+        if (gameStatus.started) {
+            timerInterval = setInterval(() => {
+                setGameStatus(prevStatus => ({
+                    ...prevStatus,
+                    timer: prevStatus.timer + 1
+                }));
+            }, 1000);
+        }
+        return () => clearInterval(timerInterval);
+    }, [gameStatus.timer, gameStatus.started]);
+
     const randomNum = () => Math.ceil(Math.random() * 6);
     const matchDies = () => gameDices.hold.every((dice, index, arr) => dice.value === arr[0].value);
     const addClick = () => {
@@ -28,7 +40,9 @@ const App = () => {
 
     React.useEffect(() => {
         let dicesTrack = (gameDices.dices.length && gameDices.dices.every(dice => dice.die));
-
+        /**
+         * Need to fix this matchDies dependecy thing, maybe wrap it up in dices track donno
+         */
         if (dicesTrack && matchDies()) {
             setGameStatus(prevStatus => ({
                 ...prevStatus,
@@ -37,6 +51,7 @@ const App = () => {
             }));
             return console.log('Well Done!');
         }
+
     }, [gameDices.dices]);
 
     const getDices = () => {
@@ -99,7 +114,8 @@ const App = () => {
             setGameStatus({
                 started: true,
                 status: 'start',
-                count: 0
+                count: 0,
+                timer: 0
             });
             return getDices();
         }
@@ -121,11 +137,11 @@ const App = () => {
             <main>
                 <section className='app-sec'>
                     <p className='warning'>
-                        {gameStatus.started && `Clicks: ${gameStatus.count}`}
-                    </p>
-                    <p className='stats-click'>
                         {!matchDies() && 'Values Selected do not match!'}
                     </p>
+                    <Status
+                        allStats={gameStatus}
+                    />
                     <Tenzi
                         game={gameDices}
                         status={gameStatus}

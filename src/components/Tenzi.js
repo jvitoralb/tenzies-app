@@ -16,7 +16,7 @@ const Tenzi = ({ game, status, dieHandler }) => {
         <div className='end-game'>
             <h3>Well Done!</h3>
             <p>Clicks {status.count}</p>
-            <p>Time {'do:it'.toLocaleUpperCase()}</p>
+            <p>Time {status.timer}s</p>
         </div>
     );
 
@@ -27,7 +27,7 @@ const Tenzi = ({ game, status, dieHandler }) => {
 
     return (
         <React.Fragment>
-            {   
+            {
                 display[status.status] &&
                 <div className='dices'>
                     {display[status.status]}
