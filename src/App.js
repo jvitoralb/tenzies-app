@@ -7,24 +7,29 @@ import './components/Styling/styles.css';
 
 
 const App = () => {
-    const [gameStatus, setGameStatus] = React.useState({
-        started: false,
-        status: 'initial'
-    });
-    const [gameDices, setGameDices] = React.useState({
-        dices: [],
-        hold: []
-    });
-    const [score, setScore] = React.useState({
-        count: 0,
-        timer: 0
-    });
+    const initial = {
+        status: {
+            started: false,
+            status: 'initial'
+        },
+        dices: {
+            dices: [],
+            hold: []
+        },
+        score: {
+            count: 0,
+            timer: 0
+        }
+    }
+    const [gameStatus, setGameStatus] = React.useState(initial.status);
+    const [gameDices, setGameDices] = React.useState(initial.dices);
+    const [score, setScore] = React.useState(initial.score);
 
     React.useEffect(() => {
         let dicesTrack = (
             gameDices.dices.length &&
             gameDices.dices.every(dice => dice.die) && 
-            gameDices.hold.every((dice, index, arr) => dice.value === arr[0].value)
+            gameDices.hold.every((dice, idx, arr) => dice.value === arr[0].value)
         );
 
         if (dicesTrack) {
@@ -48,7 +53,7 @@ const App = () => {
         return () => clearInterval(timerInterval);
     }, [score.timer, gameStatus.started]);
 
-    const matchDies = () => gameDices.hold.every((dice, index, arr) => dice.value === arr[0].value);
+    const matchDies = () => gameDices.hold.every((dice, idx, arr) => dice.value === arr[0].value);
     const randomNum = () => Math.ceil(Math.random() * 6);
     const addClick = () => {
         setScore(prevScore => ({
@@ -76,9 +81,7 @@ const App = () => {
     const rollDices = () => {
         addClick();
 
-        if (!matchDies()) {
-            return console.log('Values selected do not match!');
-        }
+        if (!matchDies()) return console.log('Values selected do not match!');
 
         setGameDices(prevState => ({
             ...prevState,
@@ -93,12 +96,8 @@ const App = () => {
 
     const startRoll = () => {
         if (!gameStatus.started) {
-            if (gameStatus.status === 'finish') {
-                setScore({
-                    count: 0,
-                    timer: 0
-                });
-            }
+            if (gameStatus.status === 'finish') setScore(initial.score);
+
             setGameStatus({
                 started: true,
                 status: 'start'
@@ -107,6 +106,12 @@ const App = () => {
         }
 
         return rollDices();
+    }
+
+    const resetAll = () => {
+        setGameStatus(initial.status);
+        setGameDices(initial.dices);
+        setScore(initial.score);
     }
 
     const displayBtn = {
@@ -140,6 +145,15 @@ const App = () => {
                     <button onClick={startRoll}>
                         {displayBtn[gameStatus.status]}
                     </button>
+                    {
+                        gameStatus.status === 'finish' &&
+                        <button
+                            onClick={resetAll}
+                            className={'exit-btn'}
+                        >
+                            Exit
+                        </button>
+                    }
                 </section>
                 <p className='credit'>by jvitoralb</p>
             </main>

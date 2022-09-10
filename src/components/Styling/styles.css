@@ -73,8 +73,12 @@ button:hover {
 }
 
 .end-game {
-    padding: 12px 36px;
+    padding: 12px 48px;
     line-height: 24px;
+}
+
+.exit-btn {
+    padding: 7px 10px;
 }
 
 .credit {
