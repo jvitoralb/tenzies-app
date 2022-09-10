@@ -1,6 +1,6 @@
 import React from 'react';
 import Tenzi from './components/Tenzi';
-import Score from './components/Status';
+import Score from './components/Score';
 import EndGame from './components/EndGame';
 import './components/Styling/styles.css';
 
@@ -8,36 +8,16 @@ import './components/Styling/styles.css';
 const App = () => {
     const [gameStatus, setGameStatus] = React.useState({
         started: false,
-        status: 'initial',
-        count: 0,
-        timer: 0
+        status: 'initial'
     });
     const [gameDices, setGameDices] = React.useState({
         dices: [],
         hold: []
     });
-
-    React.useEffect(() => {
-        let timerInterval;
-        if (gameStatus.started) {
-            timerInterval = setInterval(() => {
-                setGameStatus(prevStatus => ({
-                    ...prevStatus,
-                    timer: prevStatus.timer + 1
-                }));
-            }, 1000);
-        }
-        return () => clearInterval(timerInterval);
-    }, [gameStatus.timer, gameStatus.started]);
-
-    const randomNum = () => Math.ceil(Math.random() * 6);
-    const matchDies = () => gameDices.hold.every((dice, index, arr) => dice.value === arr[0].value);
-    const addClick = () => {
-        setGameStatus(prevState => ({
-            ...prevState,
-            count: prevState.count + 1
-        }));
-    }
+    const [score, setScore] = React.useState({
+        count: 0,
+        timer: 0
+    });
 
     React.useEffect(() => {
         let dicesTrack = (
@@ -47,13 +27,34 @@ const App = () => {
         );
 
         if (dicesTrack) {
-            setGameStatus(prevStatus => ({
-                ...prevStatus,
+            setGameStatus(({
                 started: false,
                 status: 'finish'
             }));
         }
     }, [gameDices]);
+
+    React.useEffect(() => {
+        let timerInterval;
+        if (gameStatus.started) {
+            timerInterval = setInterval(() => {
+                setScore(prevScore => ({
+                    ...prevScore,
+                    timer: prevScore.timer + 1
+                }));
+            }, 1000);
+        }
+        return () => clearInterval(timerInterval);
+    }, [score.timer, gameStatus.started]);
+
+    const matchDies = () => gameDices.hold.every((dice, index, arr) => dice.value === arr[0].value);
+    const randomNum = () => Math.ceil(Math.random() * 6);
+    const addClick = () => {
+        setScore(prevScore => ({
+            ...prevScore,
+            count: prevScore.count + 1
+        }));
+    }
 
     const getDices = () => {
         let newArr = [];
@@ -91,11 +92,15 @@ const App = () => {
 
     const startRoll = () => {
         if (!gameStatus.started) {
+            if (gameStatus.status === 'finish') {
+                setScore({
+                    count: 0,
+                    timer: 0
+                });
+            }
             setGameStatus({
                 started: true,
-                status: 'start',
-                count: 0,
-                timer: 0
+                status: 'start'
             });
             return getDices();
         }
@@ -111,12 +116,13 @@ const App = () => {
 
     return (
         <React.Fragment>
-            <header>
+            <header id='header'>
                 <h1 className='title'>Tenzies App</h1>
             </header>
-            <main>
+            <main id='main'>
                 <section className='app-sec'>
                     <Score
+                        gameScore={score}
                         gameStatus={gameStatus}
                         matchAll={matchDies}
                     />
@@ -128,6 +134,7 @@ const App = () => {
                     />
                     <EndGame 
                         gameStatus={gameStatus}
+                        gameScore={score}
                     />
                     <button onClick={startRoll}>
                         {displayBtn[gameStatus.status]}

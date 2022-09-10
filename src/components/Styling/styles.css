@@ -50,6 +50,13 @@ button:hover {
     background-color: #f3f2e6;
 }
 
+.stats {
+    padding-bottom: 8px;
+    width: 95%;
+    display: flex;
+    justify-content: space-between;
+}
+
 .dices {
     width: 275px;
     margin: 12px;
@@ -59,9 +66,14 @@ button:hover {
     justify-content: center;
 }
 
+.hold {
+    border: 1px solid rgb(233, 244, 253);
+    background-color: rgb(233, 244, 253);
+    box-shadow: 0 0 5px rgb(0, 0, 0);
+}
+
 .end-game {
-    padding: 12px;
-    border-radius: 5px;
+    padding: 12px 36px;
     line-height: 24px;
-    /* border: 1px solid rgb(173, 173, 173); */
+    border-radius: 5px;
 }
