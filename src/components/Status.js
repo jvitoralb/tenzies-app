@@ -1,22 +1,19 @@
 import React from 'react';
 
 
-const Status = ({ allStats }) => {
+const Score = ({ gameStatus, matchAll }) => (
+    <React.Fragment>
+        {
+            gameStatus.started &&
+            <div className='stats'>
+                <p>{`Clicks: ${gameStatus.count}`}</p>
+                <p>{`Time: ${gameStatus.timer}s`}</p>
+            </div>
+        }
+        <p className='warning'>
+            {!matchAll() && 'Values Selected do not match!'}
+        </p>
+    </React.Fragment>
+);
 
-
-    return (
-        <React.Fragment>
-            {
-                allStats.started && 
-                <React.Fragment>
-                    <p className='stats-click'>
-                        {`Clicks: ${allStats.count}`}
-                    </p>
-                    <p>{`Time: ${allStats.timer}s`}</p>
-                </React.Fragment>
-            }
-        </React.Fragment>
-    )
-}
-
-export default Status;
+export default Score;

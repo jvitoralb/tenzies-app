@@ -1,6 +1,7 @@
 import React from 'react';
 import Tenzi from './components/Tenzi';
-import Status from './components/Status';
+import Score from './components/Status';
+import EndGame from './components/EndGame';
 import './components/Styling/styles.css';
 
 
@@ -115,17 +116,18 @@ const App = () => {
             </header>
             <main>
                 <section className='app-sec'>
-                    <Status
-                        allStats={gameStatus}
+                    <Score
+                        gameStatus={gameStatus}
+                        matchAll={matchDies}
                     />
-                    <p className='warning'>
-                        {!matchDies() && 'Values Selected do not match!'}
-                    </p>
                     <Tenzi
                         game={gameDices}
-                        status={gameStatus}
+                        gameStatus={gameStatus}
                         clickCount={addClick}
                         setGame={(changes) => setGameDices(changes)}
+                    />
+                    <EndGame 
+                        gameStatus={gameStatus}
                     />
                     <button onClick={startRoll}>
                         {displayBtn[gameStatus.status]}
