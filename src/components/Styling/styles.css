@@ -76,3 +76,17 @@ button:hover {
     padding: 12px 36px;
     line-height: 24px;
 }
+
+.credit {
+    color: #615f52;
+    font-size: 12px;
+}
+
+.socials {
+    display: flex;
+    justify-content: space-around;
+}
+
+.socials > a {
+    color: white;
+}

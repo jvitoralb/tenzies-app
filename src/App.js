@@ -2,6 +2,7 @@ import React from 'react';
 import Tenzi from './components/Tenzi';
 import Score from './components/Score';
 import EndGame from './components/EndGame';
+import Footer from './components/Footer';
 import './components/Styling/styles.css';
 
 
@@ -140,7 +141,9 @@ const App = () => {
                         {displayBtn[gameStatus.status]}
                     </button>
                 </section>
+                <p className='credit'>by jvitoralb</p>
             </main>
+            <Footer />
         </React.Fragment>
     );
 }
