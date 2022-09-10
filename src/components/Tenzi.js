@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const Tenzi = ({ game, status, clickCount, setGame }) => {
+const Tenzi = ({ game, gameStatus, clickCount, setGame }) => {
     const holdDie = (e) => {
         const { id } = e.target;
 
@@ -28,30 +28,18 @@ const Tenzi = ({ game, status, clickCount, setGame }) => {
             id={obj.id}
             value={obj.value}
             onClick={holdDie}
-            style={{backgroundColor: obj.die && 'aliceblue'}} // Make this a class with conditional
+            className={obj.die ? 'hold' : undefined}
         >
             {obj.value}
         </button>
     ));
-    const endGame = (
-        <div className='end-game'>
-            <h3>Well Done!</h3>
-            <p>Clicks {status.count}</p>
-            <p>Time {status.timer}s</p>
-        </div>
-    );
-
-    const display = {
-        'start': playDices,
-        'finish': endGame
-    }
 
     return (
         <React.Fragment>
             {
-                display[status.status] &&
+                gameStatus.started &&
                 <div className='dices'>
-                    {display[status.status]}
+                    {playDices}
                 </div>
             }
         </React.Fragment>
