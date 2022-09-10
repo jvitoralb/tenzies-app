@@ -36,7 +36,7 @@ button:hover {
 }
 
 .warning {
-    color: red;
+    color: #113d58;
     font-weight: bold;
 }
 
@@ -75,5 +75,4 @@ button:hover {
 .end-game {
     padding: 12px 36px;
     line-height: 24px;
-    border-radius: 5px;
 }
