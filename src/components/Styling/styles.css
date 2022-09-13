@@ -73,6 +73,9 @@ button:hover {
 }
 
 .end-game {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
     padding: 12px 48px;
     line-height: 24px;
 }
@@ -93,4 +96,8 @@ button:hover {
 
 .socials > a {
     color: white;
+}
+
+.socials > a:hover {
+    color: rgb(255, 248, 200);
 }

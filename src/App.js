@@ -28,7 +28,7 @@ const App = () => {
     React.useEffect(() => {
         let dicesTrack = (
             gameDices.dices.length &&
-            gameDices.dices.every(dice => dice.die) && 
+            gameDices.dices.every(dice => dice.die) &&
             gameDices.hold.every((dice, idx, arr) => dice.value === arr[0].value)
         );
 
@@ -120,6 +120,12 @@ const App = () => {
         initial: 'Start Playing'
     }
 
+    const mainButton = (
+        <button onClick={startRoll}>
+            {displayBtn[gameStatus.status]}
+        </button>
+    );
+
     return (
         <React.Fragment>
             <header id='header'>
@@ -141,19 +147,10 @@ const App = () => {
                     <EndGame 
                         gameStatus={gameStatus}
                         gameScore={score}
+                        reset={resetAll}
+                        button={mainButton}
                     />
-                    <button onClick={startRoll}>
-                        {displayBtn[gameStatus.status]}
-                    </button>
-                    {
-                        gameStatus.status === 'finish' &&
-                        <button
-                            onClick={resetAll}
-                            className={'exit-btn'}
-                        >
-                            Exit
-                        </button>
-                    }
+                    {gameStatus.status !== 'finish' && mainButton}
                 </section>
                 <p className='credit'>by jvitoralb</p>
             </main>
