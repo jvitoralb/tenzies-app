@@ -4,6 +4,8 @@ This app was mainly used to practice ReactJS skills.
 This project idea I got from [this](https://www.youtube.com/watch?v=bMknfKXIFA8) tutorial.  
 Pretty straightforward styling so I could focus on React concepts.
 
+App [homepage](https://jvitoralb.github.io/tenzies-app).
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
