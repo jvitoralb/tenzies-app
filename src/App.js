@@ -136,12 +136,12 @@ const App = () => {
                     <Score
                         gameScore={score}
                         gameStatus={gameStatus}
-                        matchAll={matchDies}
                     />
                     <Tenzi
                         game={gameDices}
                         gameStatus={gameStatus}
                         clickCount={addClick}
+                        matchAll={matchDies}
                         setGame={(changes) => setGameDices(changes)}
                     />
                     <EndGame 

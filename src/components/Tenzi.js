@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const Tenzi = ({ game, gameStatus, clickCount, setGame }) => {
+const Tenzi = ({ game, gameStatus, clickCount, setGame, matchAll }) => {
     const holdDie = (e) => {
         const { id } = e.target;
 
@@ -38,9 +38,21 @@ const Tenzi = ({ game, gameStatus, clickCount, setGame }) => {
         <React.Fragment>
             {
                 gameStatus.started &&
-                <div className='dices'>
-                    {playDices}
-                </div>
+                <React.Fragment>
+                    <div className='dices'>
+                    {
+                        !matchAll() ?
+                        <p className='warning'>
+                            Values Selected do not match!
+                        </p> :
+                        <p className='instructions'>
+                            Roll until all dice are the same.
+                            Click to freeze it at its current value.
+                        </p>
+                    }
+                        {playDices}
+                    </div>
+                </React.Fragment>
             }
         </React.Fragment>
     );

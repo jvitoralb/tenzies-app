@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const Score = ({ gameStatus, matchAll, gameScore }) => (
+const Score = ({ gameStatus, gameScore }) => (
     <React.Fragment>
         {
             gameStatus.started &&
@@ -9,12 +9,6 @@ const Score = ({ gameStatus, matchAll, gameScore }) => (
                 <p>{`Clicks: ${gameScore.count}`}</p>
                 <p>{`Time: ${gameScore.timer}s`}</p>
             </div>
-        }
-        {
-            !matchAll() &&
-            <p className='warning'>
-                Values Selected do not match!
-            </p>
         }
     </React.Fragment>
 );
